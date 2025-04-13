@@ -2,63 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fitness Tracker - Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fitness Login</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🏋️‍♀️ Fitness Tracker</h1>
-    <div class="auth-box">
-      <h2 id="formTitle">Login</h2>
-      <input type="text" id="username" placeholder="Enter Username" />
-      <input type="password" id="password" placeholder="Enter Password" />
-      <button onclick="login()">Login</button>
-      <p>Don't have an account? <a href="#" onclick="toggleForm()">Sign Up</a></p>
-      <div id="authMessage" class="message"></div>
-    </div>
+    <h1>Fitness Tracker - Login</h1>
+    <form id="loginForm">
+      <label for="username">Username:</label>
+      <input type="text" id="username" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" required />
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p>or <a href="dashboard.html">go to dashboard</a></p>
   </div>
 
   <script>
-    let isSignup = false;
-
-    function toggleForm() {
-      isSignup = !isSignup;
-      document.getElementById("formTitle").innerText = isSignup ? "Sign Up" : "Login";
-      document.querySelector("button").innerText = isSignup ? "Sign Up" : "Login";
-      document.querySelector("p").innerHTML = isSignup
-        ? 'Already have an account? <a href="#" onclick="toggleForm()">Login</a>'
-        : 'Don\'t have an account? <a href="#" onclick="toggleForm()">Sign Up</a>';
-      document.getElementById("authMessage").innerText = "";
-    }
-
-    function login() {
-      const username = document.getElementById("username").value.trim();
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      if (!username || !password) {
-        showMessage("⚠️ Please enter all fields.");
-        return;
-      }
-
-      if (isSignup) {
-        localStorage.setItem("user", JSON.stringify({ username, password }));
-        showMessage("✅ Account created! Please login.");
-        toggleForm();
+      // Just store and redirect (no real auth logic)
+      if (username && password) {
+        localStorage.setItem("username", username);
+        window.location.href = "dashboard.html"; // redirect after login
       } else {
-        const saved = JSON.parse(localStorage.getItem("user"));
-        if (saved && saved.username === username && saved.password === password) {
-          localStorage.setItem("loggedIn", "true");
-          window.location.href = "dashboard.html";
-        } else {
-          showMessage("❌ Invalid username or password.");
-        }
+        alert("Please enter both username and password.");
       }
-    }
-
-    function showMessage(msg) {
-      document.getElementById("authMessage").innerText = msg;
-    }
+    });
   </script>
 </body>
 </html>
